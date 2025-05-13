@@ -6,6 +6,36 @@
   <title>La Posada del Hechicero - Inicio</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+  <script>
+  // Fetch y mostrar productos con más stock
+  async function cargarDestacados() {
+    try {
+      const res = await fetch('https://la-posada-del-hechicero.onrender.com/api/products');
+      const productos = await res.json();
+      const destacados = productos
+        .sort((a, b) => b.stock - a.stock)
+        .slice(0, 6);
+
+      const contenedor = document.getElementById('featured-products');
+      destacados.forEach(p => {
+        const div = document.createElement('div');
+        div.classList.add('product');
+        div.innerHTML = `
+          <h3>${p.name}</h3>
+          <p>${p.description}</p>
+          <strong>$${p.price}</strong>
+          <span class="stock">Stock: ${p.stock}</span>
+        `;
+        contenedor.appendChild(div);
+      });
+    } catch (err) {
+      console.error('Error al cargar productos destacados:', err);
+    }
+  }
+
+  cargarDestacados();
+</script>
+
 <body>
   <header>
     <div class="header-content">
